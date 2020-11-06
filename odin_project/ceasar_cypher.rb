@@ -6,14 +6,30 @@
 #  => "Bmfy f xywnsl!"
 
 def caesar_cipher
+  alphas = %w(a b c d e f g h i j k l m n o p q r s t u v w x y z)
+
   puts "enter a string you want to encode"
   str = gets.chomp
-
   puts "enter a positive or negative integer to shift \"#{str}\""
   shift = gets.to_i
 
-  str_arr = str.split("").to_c.each { |char| char.downcase.find_index + shift }
-  pp str_arr
+  str_arr = str.split(" ")
+  shifted_string = ""
+  idx = 0
+
+  str_arr.each do |word|
+    shifted_word = ""
+    word.split("") do |char|
+      if alphas.index(char.downcase) + shift > alphas.size
+        idx = (alphas.index(char.downcase) + shift) - 26
+        shifted_word << alphas[idx]
+      else
+        shifted_word << alphas[alphas.index(char.downcase) + shift]
+      end
+    end
+    shifted_string << " " << shifted_word
+  end
+  puts shifted_string.strip
 end
 
 caesar_cipher
