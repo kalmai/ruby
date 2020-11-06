@@ -20,11 +20,22 @@ def caesar_cipher
   str_arr.each do |word|
     shifted_word = ""
     word.split("") do |char|
-      if alphas.index(char.downcase) + shift > alphas.size
+      if !alphas.include?(char.downcase)
+        shifted_word << char
+      elsif alphas.index(char.downcase) + shift > alphas.size - 1
         idx = (alphas.index(char.downcase) + shift) - 26
-        shifted_word << alphas[idx]
+        if char.downcase != char
+          shifted_word << alphas[idx].upcase
+        else
+          shifted_word << alphas[idx]
+        end
       else
-        shifted_word << alphas[alphas.index(char.downcase) + shift]
+        idx = (alphas.index(char.downcase) + shift)
+        if char.downcase != char
+          shifted_word << alphas[idx].upcase
+        else
+          shifted_word << alphas[idx]
+        end
       end
     end
     shifted_string << " " << shifted_word
