@@ -10,7 +10,7 @@ def caesar_cipher
 
   puts "enter a string you want to encode"
   str = gets.chomp
-  puts "enter a positive or negative integer to shift \"#{str}\""
+  puts "enter a positive integer to shift \"#{str}\""
   shift = gets.to_i
 
   str_arr = str.split(" ")
