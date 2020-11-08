@@ -6,17 +6,6 @@
 example_arr = [17,3,6,9,15,8,6,1,10]
 
 def stock_picker(day_arr)
-  temp_arr = []
-
-  # substract the first value from the second value to find the one with the greatest difference
-  # make a loop that sets the first value to 'x'
-  #   then do another loop from the index of 'x' + 1 so it doesn't compare against itself
-  #     in this loop create a hash with the key as the difference and the values being an array of indexes
-  #
-  #     select the largest difference key and return that and push it to an array of arrays
-  #
-  #   finally, select the array where the difference is the greatest
-
   hsh = {}
 
   day_arr.each_with_index do |date, idx1|
@@ -33,4 +22,3 @@ def stock_picker(day_arr)
 end
 
 stock_picker(example_arr)
-
