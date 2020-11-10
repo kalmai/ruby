@@ -8,8 +8,6 @@ num_arr = [4,3,78,2,0,2]
 def bubble_sort(arr)
   previous_arr = []
 
-  has_changed = true
-
   def changed?(arr1, arr2)
     arr1 == arr2
   end
@@ -22,9 +20,7 @@ def bubble_sort(arr)
         arr[i] = arr[i + 1]
         arr[i + 1] = temp
       end
-
     end
-
   end
   return arr
 end
