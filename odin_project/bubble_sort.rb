@@ -6,19 +6,17 @@
 num_arr = [4,3,78,2,0,2]
 
 def bubble_sort(arr)
-  previous_arr = []
+  swapped = true
 
-  def changed?(arr1, arr2)
-    arr1 == arr2
-  end
-  
-  while changed?(previous_arr,arr) == false 
-    previous_arr = arr.dup
+  while swapped == true
+    swapped = false
     for i in 0..(arr.length - 2)
       if arr[i] > arr[i + 1]
         temp = arr[i]
         arr[i] = arr[i + 1]
         arr[i + 1] = temp
+        swapped = true
+        break
       end
     end
   end
