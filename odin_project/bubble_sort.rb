@@ -6,9 +6,7 @@
 num_arr = [4,3,78,2,0,2]
 
 def bubble_sort(arr)
-  swapped = true
-
-  while swapped == true
+  loop do
     swapped = false
     for i in 0..(arr.length - 2)
       if arr[i] > arr[i + 1]
@@ -16,9 +14,9 @@ def bubble_sort(arr)
         arr[i] = arr[i + 1]
         arr[i + 1] = temp
         swapped = true
-        break
       end
     end
+    break if !swapped
   end
   return arr
 end
