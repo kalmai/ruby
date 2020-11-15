@@ -25,18 +25,17 @@ end
 
 class Person
   include Drive
-  attr_reader :name
-  attr_reader :age
+  attr_reader :name, :age
   def initialize(name, age)
     @name = name
     @age = age
   end
 
-  def speak(phrase)
-    puts phrase
+  def introduce
+    puts "Hello, my name is #{name} and I am #{age} years old!"
   end
 end
 
 bob = Person.new("Bob", 25)
-bob.speak("Hello, my name is #{bob.name} and I am #{bob.age} years old!")
+bob.introduce
 bob.can_do_this("drive", bob.name)
