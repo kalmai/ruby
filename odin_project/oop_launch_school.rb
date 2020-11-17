@@ -39,6 +39,17 @@ class MyCar
   def spray_paint(c)
     puts "You paint your car from #{color} to #{self.color = c}"
   end
+
+# Add a class method to your MyCar class that calculates the gas mileage of any car.
+  def self.gas_mileage(miles, gallons)
+    puts "your mileage on your trip was #{miles/gallons} mpg"
+  end
+
+# Override the to_s method to create a user friendly print out of your object.
+  def to_s
+    "Your car is a #{@year} #{@color} #{@model}"
+  end
+
 end
 
 honda = MyCar.new(2020, "blue", "civic")
@@ -61,3 +72,6 @@ puts honda.color
 puts honda.year
 
 puts honda.spray_paint("beige")
+
+puts MyCar.gas_mileage(100,10)
+puts honda
