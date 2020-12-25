@@ -41,7 +41,7 @@ module Color
   end
 end
 
-#puts colorize("red", "this is a test")
+#puts Color::colorize("red", "this is a test")
 #puts colorize("black", "this is a test")
 #puts colorize("green", "this is a test")
 #puts colorize("yellow", "this is a test")
