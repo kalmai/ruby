@@ -132,19 +132,44 @@ def file_splitter
   number_of_files_to_be_created = ( file_lines / lines_of_text_per_file.to_f ).ceil
 
   puts "#{original_file} contains #{file_lines} and will produce #{number_of_files_to_be_created} output files"
-  `mkdir delete_this`
-  file_array = (number_of_files_to_be_created).times { |i| File.new("delete_this/input-#{i + 1}", "w") }
+  !File.directory?("delete_this") ? `mkdir delete_this` : (`rm -rf delete_this`; `mkdir delete_this`)
+  file_array = []
+
+  (number_of_files_to_be_created).times do |i|
+    file_array.push(File.new("delete_this/input-#{i + 1}", "w"))
+    puts "generating input-#{i + 1}"
+  end
+
   opened_file = File.open(original_file, "r")
 
-  while !opened_file.eof?
-    file_name_number = 1
-    i = lines_of_text_per_file.dup
-    file = File.new("input-#{file_name_number}", "w")
+  break_points = []
+  num = lines_of_text_per_file
+  (number_of_files_to_be_created - 1).times do
+    break_points.push(num)
+    num += lines_of_text_per_file
+  end
+  
+  i = 0
+  while i < file_lines
     opened_file.each_line do |line|
-      file.puts line
-      i -= 1
+      if break_points.include?(i)
+        file_to_be_closed = file_array.shift
+        file_to_be_closed.close
+      end
+      file_array[0].puts line
+      i += 1
     end
   end
+
+#  while !opened_file.eof?
+#    file_name_number = 1
+#    i = lines_of_text_per_file.dup
+#    file = File.new("input-#{file_name_number}", "w")
+#    opened_file.each_line do |line|
+#      file.puts line
+#      i -= 1
+#    end
+#  end
 
 end 
 
