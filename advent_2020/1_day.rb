@@ -27,4 +27,105 @@
 #
 # To play, please identify yourself via one of these services:
 
+require 'pry'
 
+def sum_2020_and_multiply
+  puts "enter the the puzzle input"
+  file_input = gets.strip
+  
+  while !File.file?(file_input)
+    puts "please enter a valid puzzle input"
+    file_input = gets.strip
+  end
+
+  puts "\nprocessing ..."
+
+  file_reader = File.open(file_input, "r")
+
+  num_arr = [nil, nil]
+  i = 0
+  changed = false
+  
+  file_length = `wc -l #{file_input}`.split(" ")[0].to_i
+
+  while i < file_length - 1
+    while changed == false
+      file_reader.each_line do |line|
+        i += 1
+        if num_arr[0].nil? || (num_arr[0].keys[0] + 1) == i
+          num_arr[0] = {i => line.to_i}
+          changed = true
+          break
+        end
+      end
+      i = 0
+    end
+
+    while !file_reader.eof?
+      file_reader.each_line do |line|
+        num_arr[1] = line.to_i
+        sum = num_arr[0].values[0] + num_arr[1]
+        if sum == 2020
+          puts "\n#{num_arr[0].values[0] * num_arr[1]} is the product of #{num_arr[0].values[0]} and #{num_arr[1]}"
+          file_reader.close 
+          exit
+        end
+      end
+      changed = false
+    end
+    file_reader.rewind
+  end
+end
+
+def sum_2020_and_multiply_three_values
+  puts "enter the the puzzle input"
+  file_input = gets.strip
+  
+  while !File.file?(file_input)
+    puts "please enter a valid puzzle input"
+    file_input = gets.strip
+  end
+
+  puts "\nprocessing ..."
+
+  file_reader = File.open(file_input, "r")
+
+  num_arr = [nil, nil, nil]
+  i = 0
+  changed = false
+  
+  file_length = `wc -l #{file_input}`.split(" ")[0].to_i
+
+  while i < file_length - 1
+    while changed == false
+      file_reader.each_line do |line|
+        i += 1
+        if num_arr[0].nil? || (num_arr[0].keys[0] + 1) == i
+          num_arr[0] = {i => line.to_i}
+    #      changed = true
+     #     break
+        elsif
+        end
+      end
+      i = 0
+    end
+
+    while !file_reader.eof?
+      file_reader.each_line do |line|
+        num_arr[2] = line.to_i
+        sum = num_arr[0].values[0] + num_arr[2] + num_arr[1].values[0]
+        binding.pry
+        if sum == 2020
+          puts "\n#{num_arr[0].values[0] * num_arr[1]} is the product of #{num_arr[0].values[0]} and #{num_arr[1]}"
+          file_reader.close 
+          exit
+        end
+      end
+      changed = false
+    end
+    file_reader.rewind
+  end
+end
+
+#sum_2020_and_multiply
+sum_2020_and_multiply_three_values
