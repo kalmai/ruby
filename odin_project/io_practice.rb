@@ -131,6 +131,7 @@ def file_splitter
   file_lines = `wc -l #{original_file}`.split(" ")[0].to_i
   number_of_files_to_be_created = ( file_lines / lines_of_text_per_file.to_f ).ceil
 
+  # explore using dir class in the future or now
   puts "#{original_file} contains #{file_lines} and will produce #{number_of_files_to_be_created} output files"
   !File.directory?("delete_this") ? `mkdir delete_this` : (`rm -rf delete_this`; `mkdir delete_this`)
   file_array = []
@@ -160,16 +161,6 @@ def file_splitter
       i += 1
     end
   end
-
-#  while !opened_file.eof?
-#    file_name_number = 1
-#    i = lines_of_text_per_file.dup
-#    file = File.new("input-#{file_name_number}", "w")
-#    opened_file.each_line do |line|
-#      file.puts line
-#      i -= 1
-#    end
-#  end
 
 end 
 
@@ -221,5 +212,4 @@ def method_selector
   end
 end
 
-#file_splitter
 method_selector
