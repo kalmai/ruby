@@ -90,41 +90,71 @@ def sum_2020_and_multiply_three_values
 
   file_reader = File.open(file_input, "r")
 
-  num_arr = [nil, nil, nil]
-  i = 0
-  changed = false
-  
   file_length = `wc -l #{file_input}`.split(" ")[0].to_i
 
-  while i < file_length - 1
-    while changed == false
-      file_reader.each_line do |line|
-        i += 1
-        if num_arr[0].nil? || (num_arr[0].keys[0] + 1) == i
-          num_arr[0] = {i => line.to_i}
-    #      changed = true
-     #     break
-        elsif
-        end
-      end
-      i = 0
-    end
+    # using a binary search to do this, start from two ends of a list and look at indexes from left to right (this will likely be faster than the double loop)
+    # try using a hash for all values in the arrays, use a normal hash and create a big ass hash and #select from it.
+  # focus on the math, array of 4 things, know current value, if any other thing or anything i will look at, store key of x then 
 
-    while !file_reader.eof?
-      file_reader.each_line do |line|
-        num_arr[2] = line.to_i
-        sum = num_arr[0].values[0] + num_arr[2] + num_arr[1].values[0]
-        binding.pry
-        if sum == 2020
-          puts "\n#{num_arr[0].values[0] * num_arr[1]} is the product of #{num_arr[0].values[0]} and #{num_arr[1]}"
-          file_reader.close 
-          exit
-        end
-      end
-      changed = false
-    end
-    file_reader.rewind
+  # think about the sum instead of the numbers 
+  
+  num_hsh = {}
+
+  file_reader.each_line.with_index do |line, idx|
+    num_hsh[idx] = line.to_i
   end
+
+  file_reader.rewind
+  first = []
+  second = nil
+  third = nil
+  sum_of_first_and_second = 0
+
+  for i in 1..file_length
+    binding.pry
+
+    first = num_hsh.first.dup
+  end
+
+#    num_hsh.each do |k, v|
+#      i += 1
+#      binding.pry
+#      first = num_hsh.first.dup
+#      if first[0] == i
+#        next
+#      end
+#      if k == i
+#        binding.pry
+#        num_hsh.delete(first[0])
+#        second = v
+#        sum_of_first_and_second = first[1] + second
+#        break
+#      end
+#    end
+
+
+
+#    while !changed
+#      num_hsh.each do |k, v|
+#        binding.pry
+#        i += 1
+#        if k == i
+#          second = [k, v]
+#          changed = true
+#          break
+#        end
+#      end
+#    end
+#    changed = false
+#
+#    if sum_of_first_and_second < 2020
+#      remainder = 2020 - sum_of_first_and_second
+#      num_hsh.each do |k, v|
+#        third = [k, v]
+#        puts "f #{first}, s #{second}, t #{third} multiplied = "
+#      end
+#    end
+
 end
 
 #sum_2020_and_multiply
