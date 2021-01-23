@@ -30,6 +30,8 @@
 #
 # The locations you'd check in the above example are marked here with O where there was an open square and X where there was a tree:
 
+require 'pry'
+
 def tree_nav
   puts "enter the input file"
   input = gets.strip
@@ -41,9 +43,31 @@ def tree_nav
 
   file_reader = File.open(input)
 
+  position = 0 
+  tree_count = 0
+
   file_reader.each_line do |line|
+    forest = line.strip
+    until forest.length >= position 
+      forest << line.strip
+    end
+
+#    if position == 0 || position == 3
+#      binding.pry
+#      tree_count += 1 if forest[position].eql?("#")
+#      position += 3
+#      next
+#    end
+
+    char_range = forest[0..position]
+    tree_count += 1 if char_range[-1].eql?("#")
+    position += 3
   end
 
-  
+  file_reader.close
+
+  puts "you encountered #{tree_count} trees descending the slope that was #{`wc -l #{input}`.split(" ")[0].to_i} long"
 
 end
+
+tree_nav
