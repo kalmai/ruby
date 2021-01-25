@@ -48,19 +48,10 @@ def tree_nav
 
   file_reader.each_line do |line|
     forest = line.strip
-    until forest.length >= position 
-      forest << line.strip
-    end
+    temp_position = position > forest.length ? position % forest.length : position
+    value_at_position = forest[temp_position]
 
-#    if position == 0 || position == 3
-#      binding.pry
-#      tree_count += 1 if forest[position].eql?("#")
-#      position += 3
-#      next
-#    end
-
-    char_range = forest[0..position]
-    tree_count += 1 if char_range[-1].eql?("#")
+    tree_count += 1 if value_at_position.eql?('#')
     position += 3
   end
 
