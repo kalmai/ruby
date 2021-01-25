@@ -32,9 +32,11 @@
 
 require 'pry'
 
-def tree_nav
-  puts "enter the input file"
-  input = gets.strip
+def tree_nav(horizontal_amount, vertical_amount, input = nil)
+  if input.nil?
+    puts "enter the input file"
+    input = gets.strip
+  end
 
   while !File.file?(input)
     puts "#{input} is not a valid file, please enter a valid file"
@@ -44,21 +46,36 @@ def tree_nav
   file_reader = File.open(input)
 
   position = 0 
+  down_count = vertical_amount
   tree_count = 0
 
   file_reader.each_line do |line|
     forest = line.strip
-    temp_position = position > forest.length ? position % forest.length : position
-    value_at_position = forest[temp_position]
+#    binding.pry if vertical_amount == 2
 
-    tree_count += 1 if value_at_position.eql?('#')
-    position += 3
+    if down_count == vertical_amount
+      temp_position = position > forest.length ? position % forest.length : position
+      value_at_position = forest[temp_position]
+
+      tree_count += 1 if value_at_position.eql?('#')
+      position += horizontal_amount
+      down_count = 1 if vertical_amount > 1
+      next
+    end
+    down_count += 1
   end
 
   file_reader.close
 
-  puts "you encountered #{tree_count} trees descending the slope that was #{`wc -l #{input}`.split(" ")[0].to_i} long"
+  puts "you encountered #{tree_count} trees descending the slope that was #{`wc -l #{input}`.split(" ")[0].to_i} long by moving horizontally #{horizontal_amount} and down by #{vertical_amount}"
 
+  return tree_count
 end
 
-tree_nav
+a = tree_nav(1,1,'input-3.txt')
+b = tree_nav(3,1,'input-3.txt')
+c = tree_nav(5,1,'input-3.txt')
+d = tree_nav(7,1,'input-3.txt')
+e = tree_nav(1,2,'input-3.txt')
+
+puts "when you multipy all slopes together you get #{a * b * c * d * e}"
