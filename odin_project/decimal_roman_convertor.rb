@@ -2,43 +2,64 @@
 
 require 'pry'
 
-def convertor(input)
-  literals = {
-    1 => "I",
-    5 => "V",
-    10 => "X",
-    50 => "L",
-    100 => "C",
-    500 => "D",
-    1000 => "M"
+def convertor
+  puts "enter an integer to convert"
+  input = gets.strip
+
+  is_i = input == input.to_i.to_s
+  
+  until is_i && input.to_i <= 3000
+    puts "enter a valid integer or a value less than 3000"
+    input = gets.strip
+    is_i = input == input.to_i.to_s
+  end
+
+  digit_= {
+    1 => %w( X V I ),
+    2 => %w( C L X ),
+    3 => %w( M D C ),
+    4 => %w( * * M)
   }
 
   roman_value = ""
   remainder = input.dup
-  thousands = remainder.to_s[0] << "000" if remainder.to_s.length == 4
 
-  digits = {
-    "4" => [0,0],
-    "3" => [0,0],
-    "2" => [0,0],
-    "1" => [0,0]
-  }
-
-  i = remainder.to_s.length
+  digits = {}
   
-  until i < 0 do 
+  i = remainder.length
+  digit_place = 1 
+
+  while i > 0
+    current_digit = remainder[i - 1].to_i
+    high = digit_[digit_place][0]
+    middle = digit_[digit_place][1]
+    low = digit_[digit_place][2]
+
+    if current_digit == 9
+      roman_value << high << low 
+      current_digit = 0
+    end
+    if current_digit >= 5
+      current_digit -= 5
+      (current_digit).times { roman_value << low }
+      roman_value << middle
+      current_digit = 0
+    end
+    if current_digit == 4
+      roman_value << middle << low 
+      current_digit = 0 
+    end
+    if current_digit <= 3
+      (current_digit).times { roman_value << low }
+      current_digit = 0
+    end
+
+    digit_place += 1
     i -= 1
-    binding.pry
   end
 
-
-
-
-  puts "you entered #{input} which is #{roman_value} in roman numerals"
+  puts "you entered #{input} which is #{roman_value.reverse} in roman numerals"
 
 end
 
-puts "enter an integer to convert"
-input = gets.to_i
-
-convertor(input)
+convertor
