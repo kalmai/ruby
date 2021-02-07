@@ -26,39 +26,42 @@ def convertor
 
   digits = {}
   
-  i = remainder.length
-  digit_place = 1 
+  i = 0
 
-  while i > 0
-    current_digit = remainder[i - 1].to_i
-    high = digit_[digit_place][0]
-    middle = digit_[digit_place][1]
-    low = digit_[digit_place][2]
+  while i < remainder.length
+    current_digit = remainder[i].to_i
+    place = remainder.length - i 
+
+    high = digit_[place][0]
+    middle = digit_[place][1]
+    low = digit_[place][2]
 
     if current_digit == 9
-      roman_value << high << low 
+      roman_value << low << high 
       current_digit = 0
     end
+
     if current_digit >= 5
       current_digit -= 5
-      (current_digit).times { roman_value << low }
       roman_value << middle
+      (current_digit).times { roman_value << low }
       current_digit = 0
     end
+
     if current_digit == 4
-      roman_value << middle << low 
+      roman_value << low << middle 
       current_digit = 0 
     end
+
     if current_digit <= 3
       (current_digit).times { roman_value << low }
       current_digit = 0
     end
 
-    digit_place += 1
-    i -= 1
+    i += 1
   end
 
-  puts "you entered #{input} which is #{roman_value.reverse} in roman numerals"
+  puts "you entered #{input} which is #{roman_value} in roman numerals"
 
 end
 
