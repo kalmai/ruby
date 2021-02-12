@@ -8,7 +8,7 @@ def convertor
 
   is_i = input == input.to_i.to_s
   
-  until is_i && input.to_i <= 3000
+  until is_i && input.to_i <= 3999
     puts "enter a valid integer or a value less than 3000"
     input = gets.strip
     is_i = input == input.to_i.to_s
