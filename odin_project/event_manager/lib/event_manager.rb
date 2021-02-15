@@ -2,6 +2,29 @@ require 'csv'
 require 'google/apis/civicinfo_v2'
 require 'erb'
 require 'pry'
+require 'date'
+
+HOURS = []
+W_DAYS = []
+
+def target_times(date)
+  # month/day/year hour:minute
+  sign_up_date = DateTime.strptime(date, '%m/%d/%y %H:%M')
+  W_DAYS.push(sign_up_date.wday)
+  HOURS.push(sign_up_date.hour)
+end
+
+def num_to_date(num)
+  case num
+  when 0 then "sunday"
+  when 1 then "monday"
+  when 2 then "tuesday"
+  when 3 then "wednesday"
+  when 4 then "thursday"
+  when 5 then "friday"
+  when 6 then "saturday"
+  end
+end
 
 def dirty_number?(num)
   invalids = %w( ( ) - . / )
@@ -75,11 +98,22 @@ contents.each do |row|
   zipcode = clean_zipcode(row[:zipcode])
 
   phone_number = clean_phone_numbers(row[:homephone])
+  sign_up_hour = target_times(row[:regdate])
   
   legislators = zip_legislators(zipcode)
 
   form_letter = erb_template.result(binding)
-  puts form_letter
 
-#  thank_you_letters(id, form_letter)
+  thank_you_letters(id, form_letter)
 end
+
+hr_tally = HOURS.tally
+most_joined_time = hr_tally.values.max
+puts "the most joined times were"
+hr_tally.each { |k, v| puts "#{ k > 12 ? (k - 12).to_s << "pm" : k.to_s << "am" }" if v == most_joined_time }
+
+puts ""
+puts "the most joined days of the week were"
+day_tally = W_DAYS.tally
+most_joined_date = day_tally.values.max
+day_tally.each { |k, v| puts num_to_date(k) if v == most_joined_date }
