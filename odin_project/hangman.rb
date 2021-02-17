@@ -44,7 +44,7 @@ class Hangman
 
   def display_word
     system('clear')
-    puts "you've guessed: #{colorize_guesses} and have #{6 - @@wrong_guess_count} #{@@wrong_guess_count < 5 ? 'guesses' : 'guess'} remaining"
+    puts "you've guessed: #{colorize_guesses} and have #{6 - @@wrong_guess_count} #{@@wrong_guess_count == 5 ? 'guess' : 'guesses'} remaining" if @@guesses.size > 0
     @@word.split('').each do |c|
       print @@guesses.include?(c) ? c << " " : "_ "
     end
@@ -77,6 +77,7 @@ class Hangman
   def play
     pick_a_word('5desk.txt')
     system('clear')
+    display_word
     until game_over?
       input = get_input
       display_word
