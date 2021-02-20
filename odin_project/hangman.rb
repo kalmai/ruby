@@ -1,5 +1,6 @@
 require 'pry'
 require './colorize'
+require 'json'
 
 class Hangman
   include Color
@@ -7,8 +8,67 @@ class Hangman
   @@guesses = []
   @@word = ""
   @@wrong_guess_count = 0
+  @@game_id = 0
 
   def initialize; end
+
+  def get_new_game_id
+    file = File.read('saved_hangman_game.json')
+    data = JSON.parse(file)
+    new_id = data.keys.last.to_i + 1
+    @@game_id = new_id
+  end
+
+  def save_game_to_json
+    file = File.read('saved_hangman_game.json')
+    data = JSON.parse(file)
+    id = get_new_game_id
+    if data[@@game_id.to_s].nil?
+      data[@@game_id] = {
+        "word" => @@word,
+        "guesses" => @@guesses,
+        "wrong_guess_count" => @@wrong_guess_count
+      }
+    else
+      data[@@game_id.to_s]['guesses'] = @@guesses
+      data[@@game_id.to_s]['wrong_guess_count'] = @@wrong_guess_count
+    end
+
+    File.write('saved_hangman_game.json', JSON.dump(data))
+  end
+
+  def read_saved_game
+    system('clear')
+    file = File.read('saved_hangman_game.json')
+    data = JSON.parse(file)
+    puts "select one of the following sessions:"
+    num_hsh = {}
+    data.keys.each.with_index do |k, i|
+      str = ''
+      hidden_word = data[k]['word'].split('').each.with_object("") do |c, s|
+        char = data[k]['guesses'].include?(c) ? c << " " : "_ "
+        s << char
+      end
+
+      str << "#{i + 1}: #{hidden_word} [" << data[k]['guesses'].join(', ') << '] ' << data[k]['wrong_guess_count'].to_s
+      num_hsh[i + 1] = k
+      puts str 
+    end
+    input = gets.to_i
+
+    until num_hsh.keys.include?(input)
+      puts "enter a valid session: #{num_hsh.keys.join(', ')}"
+      input = gets.strip
+    end
+
+    choice = data[num_hsh[input]]
+    binding.pry
+    @@guesses = choice['guesses']
+    @@word = choice['word']
+    @@game_id = num_hsh[input]
+    @@wrong_guess_count = choice['wrong_guess_count']
+    binding.pry
+  end
 
   def colorize_guesses
     colorized_chars = @@guesses.each.with_object([]) do |c, arr|
@@ -52,6 +112,8 @@ class Hangman
   end
 
   def get_input
+    system('clear')
+    display_word
     puts "enter a character to take a guess"
     input = gets.strip.downcase
     while @@guesses.include?(input) || input.length > 1
@@ -71,16 +133,46 @@ class Hangman
       puts Color::colorize('red', "you ran out of guesses and the correct word was #{@@word}")
       exit
     end
-    
+
+  end
+
+  def save_game?
+    puts "enter 'y' to save or 'n' to continue"
+    input = gets.downcase.strip
+
+    until input.eql?('y') || input.eql?('n')
+      puts "enter 'y' to save or 'n' to continue"
+      input = gets.downcase.strip
+    end
+
+    input.eql?('y') ? true : false
+  end
+
+  def load_saved_game?
+    display_word
+    system('clear')
+    puts "enter 'y' to load your save or 'n' to continue"
+    input = gets.downcase.strip
+
+    until input.eql?('y') || input.eql?('n')
+      display_word
+      system('clear') 
+      puts "enter 'y' to load your save or 'n' to continue"
+      input = gets.downcase.strip
+    end
+
+    read_saved_game if input.eql?('y')
   end
 
   def play
     pick_a_word('5desk.txt')
     system('clear')
+    load_saved_game?
     display_word
     until game_over?
-      input = get_input
+      get_input
       display_word
+      save_game_to_json if save_game?
     end
   end
 
