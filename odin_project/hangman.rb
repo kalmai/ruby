@@ -54,7 +54,7 @@ class Hangman
           s << char
         end
 
-        str << "#{i + 1}: word - #{hidden_word} guesses - [" << @@in_memory_games[k]['guesses'].join(', ') << '] wrong guesses' << @@in_memory_games[k]['wrong_guess_count'].to_s
+        str << "#{i + 1}: word - #{hidden_word} guesses - [" << @@in_memory_games[k]['guesses'].join(', ') << '] - wrong guesses ' << @@in_memory_games[k]['wrong_guess_count'].to_s
         num_hsh[i + 1] = k
         puts str 
       end
@@ -62,7 +62,7 @@ class Hangman
 
       until num_hsh.keys.include?(input)
         puts "enter a valid session: #{num_hsh.keys.join(', ')}"
-        input = gets.strip
+        input = gets.to_i
       end
 
       choice = @@in_memory_games[num_hsh[input]]
@@ -124,9 +124,10 @@ class Hangman
         puts Color::colorize('green', "you've guessed '#{@@word}' correctly, congratulations!")
         delete_game_from_json(@@game_id)
         exit
+      else
+        @@wrong_guess_count += 1
       end
     end
-    false
   end
 
 
@@ -136,10 +137,11 @@ class Hangman
     puts "enter a character to take a guess or 'g <your guess here>' to guess the word"
     input = gets.strip.downcase
 
-    if input.length >= 5
+    binding.pry
+    if input.split(' ')[0].eql?('g')
       @@guesses.push(input.split(' ')[1])
-      @@wrong_guess_count if process_guess(input) == false
-    elsif input.length == 1 
+      process_guess(input)
+    else 
       while @@guesses.include?(input) || input.length > 1
         puts "please enter a character you haven't guessed yet. (you've guessed: #{colorize_guesses})"
         input = gets.strip.downcase
