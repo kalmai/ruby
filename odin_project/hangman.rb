@@ -9,57 +9,52 @@ class Hangman
   @@word = ""
   @@wrong_guess_count = 0
   @@game_id = 0
+  @@in_memory_games = {}
 
-  def initialize; end
+  def initialize
+    file = File.read('saved_hangman_game.json')
+    @@in_memory_games = JSON.parse(file)
+  end
 
   def get_new_game_id
-    file = File.read('saved_hangman_game.json')
-    data = JSON.parse(file)
-    new_id = data.keys.last.to_i + 1
+    new_id = @@in_memory_games.keys.last.to_i + 1
     @@game_id = new_id
   end
 
   def delete_game_from_json(game_id)
-    file = File.read('saved_hangman_game.json')
-    data = JSON.parse(file)
-    data.delete(game_id)
-    File.write('saved_hangman_game.json', JSON.dump(data))
+    @@in_memory_games.delete(game_id)
+    File.write('saved_hangman_game.json', JSON.dump(@@in_memory_games))
   end
     
 
   def save_game_to_json
-    file = File.read('saved_hangman_game.json')
-    data = JSON.parse(file)
     id = @@guesses.size > 0 ? @@game_id : get_new_game_id
-    if data[@@game_id.to_s].nil?
-      data[@@game_id] = {
+    if @@in_memory_games[@@game_id.to_s].nil?
+      @@in_memory_games[@@game_id] = {
         "word" => @@word,
         "guesses" => @@guesses,
         "wrong_guess_count" => @@wrong_guess_count
       }
     else
-      data[@@game_id.to_s]['guesses'] = @@guesses
-      data[@@game_id.to_s]['wrong_guess_count'] = @@wrong_guess_count
+      @@in_memory_games[@@game_id.to_s]['guesses'] = @@guesses
+      @@in_memory_games[@@game_id.to_s]['wrong_guess_count'] = @@wrong_guess_count
     end
 
-    File.write('saved_hangman_game.json', JSON.dump(data))
+    File.write('saved_hangman_game.json', JSON.dump(@@in_memory_games))
   end
 
   def read_saved_game
-    system('clear')
-    file = File.read('saved_hangman_game.json')
-    data = JSON.parse(file)
-    if data.keys.size > 0
+    if @@in_memory_games.keys.size > 0
       puts "select one of the following sessions:"
       num_hsh = {}
-      data.keys.each.with_index do |k, i|
+      @@in_memory_games.keys.each.with_index do |k, i|
         str = ''
-        hidden_word = data[k]['word'].split('').each.with_object("") do |c, s|
-          char = data[k]['guesses'].include?(c) ? c << " " : "_ "
+        hidden_word = @@in_memory_games[k]['word'].split('').each.with_object("") do |c, s|
+          char = @@in_memory_games[k]['guesses'].include?(c) ? c << " " : "_ "
           s << char
         end
 
-        str << "#{i + 1}: word - #{hidden_word} guesses - [" << data[k]['guesses'].join(', ') << '] wrong guesses' << data[k]['wrong_guess_count'].to_s
+        str << "#{i + 1}: word - #{hidden_word} guesses - [" << @@in_memory_games[k]['guesses'].join(', ') << '] wrong guesses' << @@in_memory_games[k]['wrong_guess_count'].to_s
         num_hsh[i + 1] = k
         puts str 
       end
@@ -70,7 +65,7 @@ class Hangman
         input = gets.strip
       end
 
-      choice = data[num_hsh[input]]
+      choice = @@in_memory_games[num_hsh[input]]
       @@guesses = choice['guesses']
       @@word = choice['word']
       @@game_id = num_hsh[input]
@@ -121,18 +116,39 @@ class Hangman
     puts ""
   end
 
+  def process_guess(input)
+    split_input = input.split(' ')
+    if split_input[0].eql?('g') 
+      guess = input.split(' ')[1]
+      if @@word.split('').all? { |c| guess.include?(c) }
+        puts Color::colorize('green', "you've guessed '#{@@word}' correctly, congratulations!")
+        delete_game_from_json(@@game_id)
+        exit
+      end
+    end
+    false
+  end
+
+
   def get_input
     system('clear')
     display_word
-    puts "enter a character to take a guess"
+    puts "enter a character to take a guess or 'g <your guess here>' to guess the word"
     input = gets.strip.downcase
-    while @@guesses.include?(input) || input.length > 1
-      puts "please enter a character you haven't guessed yet. (you've guessed: #{colorize_guesses})"
-      input = gets.strip.downcase
+
+    if input.length >= 5
+      @@guesses.push(input.split(' ')[1])
+      @@wrong_guess_count if process_guess(input) == false
+    elsif input.length == 1 
+      while @@guesses.include?(input) || input.length > 1
+        puts "please enter a character you haven't guessed yet. (you've guessed: #{colorize_guesses})"
+        input = gets.strip.downcase
+      end
+
+      @@guesses.push(input)
+      @@wrong_guess_count += 1 if @@word.include?(input) == false
     end
 
-    @@guesses.push(input)
-    @@wrong_guess_count += 1 if @@word.include?(input) == false
   end
 
   def game_over?
@@ -164,7 +180,6 @@ class Hangman
   end
 
   def load_saved_game?
-    display_word
     system('clear')
     puts "enter 'y' to load your save or 'n' to continue"
     input = gets.downcase.strip
