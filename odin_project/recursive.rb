@@ -64,5 +64,17 @@ def merge_sort(arr)
   end
 end
 
-p merge_sort([2,1,3,4])
-p merge_sort([2,1,4])
+def binary_search(arr, n)
+  min, max = 0, arr.size - 1
+  guess = (min + max) / 2
+  if arr[guess] == n
+    puts arr[guess]
+  elsif min > max
+    puts "#{n} is not in the array"
+  else
+    arr[guess] > n ? binary_search(arr[0..guess - 1], n) : binary_search(arr[guess + 1..arr.size - 1], n)
+  end
+end
+
+arr = 1000.times.with_object([]) { |i, arr| arr.push(i + 1) }
+binary_search(arr, 600) 
