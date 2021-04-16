@@ -1,27 +1,53 @@
 require 'pry'
 
 class LinkedList
-  attr_accessor :root
+  attr_accessor :root, :size
 
   def initialize
     @root = nil
+    @size = 0
   end
 
   def append_node(value)
     if @root.nil?
       @root = Node.new(value, nil)
-    elsif @root.next_node.nil? # if the next node is nil, i want to create a new node and set the next node equal to that 
-      @root.next_node = Node.new(value, nil)
+      @size += 1
     else
-      current_node = @root
-      tail = nil
-      until current_node.nil?
-        tail = current_node if current_node.next_node.nil? 
-        current_node = current_node.next_node
-      end
-      tail.next_node = Node.new(value)
+      @root = Node.new(value, @root.dup)
+      @size += 1
     end
   end
+
+  def prepend_node(value)
+    current_node = @root
+    tail = nil
+    until current_node.next_node.nil?
+      current_node = current_node.next_node
+      tail = current_node if current_node.next_node.nil?
+    end
+    tail.next_node = Node.new(value)
+    @size += 1
+  end
+
+  def size
+    @size
+  end
+
+  def head
+    current_node = @root
+    head = nil
+    until current_node.next_node.nil?
+      current_node = current_node.next_node
+      head = current_node if current_node.next_node.nil?
+    end
+    head
+  end
+
+  def tail
+    puts "value #{@root.value} next node #{@root.next_node}"
+    @root
+  end
+
 
 end
 
@@ -37,26 +63,26 @@ class Node
 #    self.next_node.nil? ? self.next_node = node : self.next_node.append_node(node)
 #  end
 
-  def prepend_node(new_node)
-    tmp = self.dup
-    self.value = new_node.value
-    self.next_node = tmp
-  end
+  #def prepend_node(new_node)
+  #  tmp = self.dup
+  #  self.value = new_node.value
+  #  self.next_node = tmp
+  #end
 
-  def size(count = 0)
-    unless self.nil?
-      count += 1
-      count = self.next_node.nil? ? count : self.next_node.size(count)
-    end
-  end
+  #def size(count = 0)
+  #  unless self.nil?
+  #    count += 1
+  #    count = self.next_node.nil? ? count : self.next_node.size(count)
+  #  end
+  #end
 
-  def head
-    self
-  end
+  #def head
+  #  self
+  #end
 
-  def tail
-    tail = self.next_node.nil? ? self : self.next_node.tail
-  end
+  #def tail
+  #  tail = self.next_node.nil? ? self : self.next_node.tail
+  #end
 
   def at(index, i = 0)
     unless self.nil?
@@ -121,10 +147,16 @@ linked_list.append_node(2)
 linked_list.append_node(3)
 linked_list.append_node(4)
 
+#linked_list.prepend_node(69)
+
 current = linked_list.root
 until current.nil?
   puts current.value
   current = current.next_node
 end
 
-# make a stack for the nodes
+#puts linked_list.size.to_s << " this is the current size"
+
+
+pp linked_list.head
+pp linked_list.tail
