@@ -4,7 +4,23 @@ class LinkedList
   attr_accessor :root
 
   def initialize
-    @root = Node.new('root')
+    @root = nil
+  end
+
+  def append_node(value)
+    if @root.nil?
+      @root = Node.new(value, nil)
+    elsif @root.next_node.nil? # if the next node is nil, i want to create a new node and set the next node equal to that 
+      @root.next_node = Node.new(value, nil)
+    else
+      current_node = @root
+      tail = nil
+      until current_node.nil?
+        tail = current_node if current_node.next_node.nil? 
+        current_node = current_node.next_node
+      end
+      tail.next_node = Node.new(value)
+    end
   end
 
 end
@@ -12,14 +28,14 @@ end
 class Node
   attr_accessor :value, :next_node
 
-  def initialize(value = rand(10), next_node = nil)
+  def initialize(value, next_node = nil)
     @value = value
     @next_node = next_node
   end
 
-  def append_node(node)
-    self.next_node.nil? ? self.next_node = node : self.next_node.append_node(node)
-  end
+#  def append_node(node)
+#    self.next_node.nil? ? self.next_node = node : self.next_node.append_node(node)
+#  end
 
   def prepend_node(new_node)
     tmp = self.dup
@@ -100,31 +116,15 @@ class Node
 end
 
 linked_list = LinkedList.new
+linked_list.append_node(1)
+linked_list.append_node(2)
+linked_list.append_node(3)
+linked_list.append_node(4)
 
-def generate_list(list, input)
-  (input).times do 
-    new_node = Node.new
-    list.root.append_node(new_node)
-  end
+current = linked_list.root
+until current.nil?
+  puts current.value
+  current = current.next_node
 end
 
-generate_list(linked_list, 2)
-
-#p_node = Node.new('new node here!')
-#linked_list.root.prepend_node(p_node)
-
-#puts linked_list.root.size
-#linked_list.root.head
-#linked_list.root.tail
-#linked_list.root.at(2) 
-#linked_list.root.pop
-#linked_list.root.size
-#linked_list.root.contains?("asdf")
-#linked_list.root.find("root")
-#puts linked_list.root.to_s
-#linked_list.root.to_s
-#puts linked_list.root
-#linked_list.root.insert_at('new node here', 2)
-#puts linked_list.root
-#linked_list.root.remove_at(1)
-#puts linked_list.root
+# make a stack for the nodes
