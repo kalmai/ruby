@@ -48,6 +48,74 @@ class LinkedList
     @root
   end
 
+  def at(index)
+    current_node = @root
+    i = @size.dup
+    return_node = nil
+    return return_node if index < 0
+    until !return_node.nil?
+      i -= 1 if i != index
+      index == i ? return_node = current_node : current_node = current_node.next_node
+    end
+    return_node
+
+  end
+
+  def pop
+    @root = @root.next_node
+  end
+
+  def contains?(value)
+    current_node = @root
+    is_in_list = false
+    until current_node.nil?
+      is_in_list = true if current_node.value == value
+      current_node = current_node.next_node
+    end
+    is_in_list
+  end
+
+  def find(value)
+    found_node = nil
+    current_node = @root
+    until found_node || current_node.nil?
+      current_node = current_node.next_node
+      (found_node = current_node; break) if current_node.value == value
+    end
+    found_node
+  end
+
+  def to_s
+    str = ""
+    current_node = @root
+    until current_node.nil?
+      current_node.next_node.nil? ? str << " ( #{current_node.value} ) -> ( nil )" : str << " ( #{current_node.value} ) ->"
+      current_node = current_node.next_node
+    end
+    str
+  end
+
+  def insert_at(value, index)
+    current_node = at(index)
+    return append_node(value) if index > @size - 1
+    new_node = Node.new(value, current_node.next_node)
+    current_node.next_node = new_node
+    @size += 1
+  end
+
+  def remove_at(index)
+    current_node = at(index)
+    following_node = at(index + 1)
+
+    if index == @size - 1
+      previous_node = at(index - 1)
+      @root = previous_node
+      @size -= 1
+    else
+      following_node.next_node = previous_node
+      @size -= 1
+    end
+  end
 
 end
 
@@ -59,86 +127,6 @@ class Node
     @next_node = next_node
   end
 
-#  def append_node(node)
-#    self.next_node.nil? ? self.next_node = node : self.next_node.append_node(node)
-#  end
-
-  #def prepend_node(new_node)
-  #  tmp = self.dup
-  #  self.value = new_node.value
-  #  self.next_node = tmp
-  #end
-
-  #def size(count = 0)
-  #  unless self.nil?
-  #    count += 1
-  #    count = self.next_node.nil? ? count : self.next_node.size(count)
-  #  end
-  #end
-
-  #def head
-  #  self
-  #end
-
-  #def tail
-  #  tail = self.next_node.nil? ? self : self.next_node.tail
-  #end
-
-  def at(index, i = 0)
-    unless self.nil?
-      index == i ? self : self.next_node.at(index, i + 1)
-    end
-  end
-
-  def pop
-    unless self.nil?
-      if self.next_node.next_node.nil?
-        self.next_node = nil
-      else
-        self.next_node.pop
-      end
-    end
-  end
-
-  def contains?(value)
-    if self.value == value
-      return true
-    else
-      return false if self.next_node.nil? 
-      self.next_node.contains?(value)
-    end
-  end
-
-  def find(value, index = 0)
-    if self.value == value
-      return index
-    elsif !self.next_node.nil?
-      self.next_node.find(value, index + 1)
-    end
-  end
-
-  def to_s(str = "")
-    self.next_node.nil? ? str << "( #{self.value} ) -> ( nil )" : self.next_node.to_s(str << "( #{self.value} ) -> ")
-  end
-
-  def insert_at(value, index)
-    node_location = self.at(index)
-    tmp = node_location.dup
-
-    node_location.value = value
-    node_location.next_node = tmp
-  end
-
-  def remove_at(index)
-    node_location = self.at(index)
-    tmp = node_location.next_node
-   # node_location.value = node_location.next_node.value
-   # node_location.next_node = tmp
-    node_location.value = tmp.value
-    node_location.next_node = tmp.next_node
-
-  end
-    
 end
 
 linked_list = LinkedList.new
@@ -147,16 +135,11 @@ linked_list.append_node(2)
 linked_list.append_node(3)
 linked_list.append_node(4)
 
-#linked_list.prepend_node(69)
 
-current = linked_list.root
-until current.nil?
-  puts current.value
-  current = current.next_node
-end
+linked_list.insert_at(69, 4)
 
-#puts linked_list.size.to_s << " this is the current size"
-
-
-pp linked_list.head
-pp linked_list.tail
+#current = linked_list.root
+#until current.nil?
+#  puts current.value
+#  current = current.next_node
+#end
