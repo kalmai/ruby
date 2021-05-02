@@ -19,27 +19,22 @@ class Tree
     return node
   end
 
-  def insert(value)
-    current_node = @root
-    changed = false
-
-    until changed == true
-      if value.between?(current_node.left.data, current_node.right.data) 
-        if current_node.right.data - value > current_node.left.data - value
-          tmp = current_node.dup
-          current_node.data = value
-          current_node.left = tmp
-          current_node.right = tmp.right
-          changed = true
-        elsif 
-          tmp = current_node.dup
-          current_node.data = value
-          current_node.left = tmp.left
-          current_node.right = tmp
-          changed = true
-        end
-      end
+  def insert(value, node = @root)
+    if value < node.data
+      node.left.nil? ? node.left = Node.new(value) : insert(value, node.left)
+    elsif value > node.data
+      node.right.nil? ? node.right = Node.new(value) : insert(value, node.right)
     end
+  end
+
+  def delete(value, node = @root)
+    if value < node.data
+      node.left.data == value ? node.left = nil : delete(value, node.left)
+    elsif value > node.data
+      node.right.data== value ? node.right = nil : delete(value, node.right)
+    end
+
+
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true)
@@ -63,12 +58,12 @@ class Node
 
 end
 
-arr = [1,50,100]
+arr = [1,50,51,52,60,70,100]
 
 binary_list = Tree.new(arr.uniq.sort)
 
-binary_list.insert(69)
-binary_list.insert(0)
+binary_list.pretty_print
+binary_list.delete(100)
 
 p arr.uniq.sort
 binary_list.pretty_print
