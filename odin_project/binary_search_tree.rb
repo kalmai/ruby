@@ -7,6 +7,7 @@ class Tree
     @root = build_tree(arr)
   end
 
+
   def build_tree(arr, _start = 0, _end = arr.size - 1)
     return nil if _start > _end
 
@@ -15,7 +16,7 @@ class Tree
 
     node.left = build_tree(arr, _start, mid - 1)
     node.right = build_tree(arr, mid + 1, _end)
-    
+
     return node
   end
 
@@ -29,13 +30,33 @@ class Tree
 
   def delete(value, node = @root)
     if value < node.data
-      node.left.data == value ? node.left = nil : delete(value, node.left)
+      if node.left.data == value && leaf?(node.left)
+        binding.pry
+        node.left = nil
+      else
+        delete(value, node.left) 
+      end
     elsif value > node.data
-      node.right.data== value ? node.right = nil : delete(value, node.right)
+      if node.right.data == value
+      else
+        delete(value, node.right) 
+      end
     end
 
-
   end
+
+  def leaf?(node)
+    node.left.nil? && node.right.nil?
+  end
+
+  def single_branch?(node)
+    !node.left.nil? ^ !node.right.nil?
+  end
+
+  def double_branch?(node)
+    !node.left.nil? && !node.right.nil?
+  end
+
 
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
@@ -48,7 +69,7 @@ class Node
   include Comparable
 
   attr_accessor :data, :left, :right
-  
+
 
   def initialize(data = nil)
     @data = data
@@ -58,12 +79,12 @@ class Node
 
 end
 
-arr = [1,50,51,52,60,70,100]
+arr = [1,2,3,4]
 
 binary_list = Tree.new(arr.uniq.sort)
 
 binary_list.pretty_print
-binary_list.delete(100)
+binary_list.delete(4)
 
 p arr.uniq.sort
 binary_list.pretty_print
