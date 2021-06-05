@@ -1,0 +1,46 @@
+1622853329.500324 client started (248): version 3.0a, socket /tmp//tmux-1000/default, protocol 8
+1622853329.500431 on Linux 4.4.0-19041-Microsoft #488-Microsoft Mon Sep 01 13:43:00 PST 2020; libevent 2.1.11-stable (poll)
+1622853329.500487 socket is /tmp//tmux-1000/default
+1622853329.500533 trying connect
+1622853329.500656 connect failed: No such file or directory
+1622853329.500698 lock file is /tmp//tmux-1000/default.lock
+1622853329.501103 flock succeeded
+1622853329.501140 got lock (6)
+1622853329.501298 trying connect
+1622853329.501376 connect failed: No such file or directory
+1622853329.505087 add peer 0x7fffc911fa10: 7 ((nil))
+1622853329.505484 sending message 100 to peer 0x7fffc911fa10 (4 bytes)
+1622853329.505514 sending message 101 to peer 0x7fffc911fa10 (15 bytes)
+1622853329.505531 sending message 102 to peer 0x7fffc911fa10 (10 bytes)
+1622853329.505553 sending message 108 to peer 0x7fffc911fa10 (55 bytes)
+1622853329.505580 sending message 104 to peer 0x7fffc911fa10 (0 bytes)
+1622853329.505597 sending message 107 to peer 0x7fffc911fa10 (4 bytes)
+1622853329.505627 sending message 105 to peer 0x7fffc911fa10 (16 bytes)
+1622853329.505644 sending message 105 to peer 0x7fffc911fa10 (23 bytes)
+1622853329.505663 sending message 105 to peer 0x7fffc911fa10 (17 bytes)
+1622853329.505679 sending message 105 to peer 0x7fffc911fa10 (11 bytes)
+1622853329.505706 sending message 105 to peer 0x7fffc911fa10 (59 bytes)
+1622853329.505729 sending message 105 to peer 0x7fffc911fa10 (15 bytes)
+1622853329.505748 sending message 105 to peer 0x7fffc911fa10 (18 bytes)
+1622853329.505769 sending message 105 to peer 0x7fffc911fa10 (13 bytes)
+1622853329.505791 sending message 105 to peer 0x7fffc911fa10 (1506 bytes)
+1622853329.505841 sending message 105 to peer 0x7fffc911fa10 (34 bytes)
+1622853329.505859 sending message 105 to peer 0x7fffc911fa10 (20 bytes)
+1622853329.505876 sending message 105 to peer 0x7fffc911fa10 (32 bytes)
+1622853329.505894 sending message 105 to peer 0x7fffc911fa10 (12 bytes)
+1622853329.505910 sending message 105 to peer 0x7fffc911fa10 (8 bytes)
+1622853329.505927 sending message 105 to peer 0x7fffc911fa10 (8 bytes)
+1622853329.505944 sending message 105 to peer 0x7fffc911fa10 (65 bytes)
+1622853329.505961 sending message 105 to peer 0x7fffc911fa10 (517 bytes)
+1622853329.505977 sending message 105 to peer 0x7fffc911fa10 (16 bytes)
+1622853329.505994 sending message 105 to peer 0x7fffc911fa10 (16 bytes)
+1622853329.506011 sending message 105 to peer 0x7fffc911fa10 (57 bytes)
+1622853329.506027 sending message 106 to peer 0x7fffc911fa10 (0 bytes)
+1622853329.506046 sending message 200 to peer 0x7fffc911fa10 (4 bytes)
+1622853329.506063 client loop enter
+1622853329.736780 peer 0x7fffc911fa10 message 207
+1622853329.736854 sending message 208 to peer 0x7fffc911fa10 (0 bytes)
+1622853334.768270 peer 0x7fffc911fa10 message 201
+1622853334.768310 sending message 205 to peer 0x7fffc911fa10 (0 bytes)
+1622853334.770987 peer 0x7fffc911fa10 message 204
+1622853334.771015 client loop exit
