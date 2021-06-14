@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../lib/11b_cat'
-require_relative '../spec/11a_shared_example_spec'
+require_relative './11a_shared_example_spec'
 
 # The file order to complete this lesson:
 
@@ -35,17 +35,21 @@ end
 
 describe Cat do
   # Create a subject with your choice of cat name and optional breed/color.
+  subject(:inferior) { described_class.new('useless') }
 
   # Write a test using the second shared_example to test that cat responds to
   # talk ('meow').
-  context '' do
+  context 'cat responds when talked at' do
+    include_examples 'shared method name'
   end
 
   # remove the 'x' before running this test
-  xit 'is not hungry' do
+  it 'is not hungry' do
+    expect(inferior).not_to be_hungry
   end
 
   # remove the 'x' before running this test
-  xit 'is hiding' do
+  it 'is hiding' do
+    expect(inferior).to be_hiding
   end
 end
