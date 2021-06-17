@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../lib/13_input_output'
+require'pry'
 
 # The file order to complete this lesson:
 # 1. Familarize yourself with the two classes in lib/13_input_output.rb
@@ -47,11 +48,14 @@ describe NumberGame do
 
       # Write a similar test to the one above, that uses a custom matcher
       # instead of <, >, =.
-      matcher :be_between_zero_and_nine do
+      matcher :be_between_zero_and_nine do |num|
+        match { |num| num <= 9 && num >= 0 }
       end
 
       # remove the 'x' before running this test
-      xit 'is a number between 0 and 9' do
+      it 'is a number between 0 and 9' do
+        solution = game.solution
+        expect(solution).to be_between_zero_and_nine
       end
     end
   end
@@ -78,8 +82,10 @@ describe NumberGame do
     # Create a new instance of NumberGame and write a test for when the @guess
     # does not equal @solution.
     context 'when user guess is not correct' do
+      subject(:game_loss) { described_class.new(1,'8') }
       # remove the 'x' before running this test
-      xit 'is not game over' do
+      it 'is not game over' do
+        expect(game_loss).not_to be_game_over
       end
     end
   end
@@ -107,7 +113,9 @@ describe NumberGame do
 
     # Write a test for the following context.
     context 'when given invalid input as argument' do
-      xit 'returns nil' do
+      subject(:invalid_game_input) { described_class.new } 
+      it 'returns nil' do
+        expect(invalid_game_input.verify_input('99')).to be_nil
       end
     end
   end
