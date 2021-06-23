@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'pry'
 require_relative '../lib/14_find_number'
 
 # The file order to complete this lesson:
@@ -115,6 +116,7 @@ describe FindNumber do
     # to receive 'value' and return the value of 8, in one of the two ways
     # explained above.
 
+    let(:number_guessing) { double('number_guessing', value: 8) } 
     subject(:game_guessing) { described_class.new(0, 9, number_guessing) }
 
     # Before you write the #make_guess method:
@@ -122,7 +124,9 @@ describe FindNumber do
     # the min and max values (rounded down). Don't expect this test to be
     # able to pass as you haven't written #make_guess yet!
     context 'when min is 0 and max is 9' do
-      xit 'returns 4' do
+      it 'returns 4' do
+        average = (game_guessing.min + game_guessing.max) / 2.to_i
+        expect(game_guessing.make_guess).to eq(average)
       end
     end
 
@@ -134,23 +138,35 @@ describe FindNumber do
     # new instance of FindNumber for each context, but you can use the same
     # random number double created inside this method's describe block.
 
+    subject(:game_guessing) { described_class.new(5, 9, number_guessing) }
     context 'when min is 5 and max is 9' do
-      xit 'returns 7' do
+      it 'returns 7' do
+        average = (game_guessing.min + game_guessing.max) / 2.to_i
+        expect(game_guessing.make_guess).to eq(average)
       end
     end
 
+    subject(:game_guessing) { described_class.new(8,9, number_guessing) }
     context 'when min is 8 and max is 9' do
-      xit 'returns 8' do
+      it 'returns 8' do
+        average = (game_guessing.min + game_guessing.max) / 2.to_i
+        expect(game_guessing.make_guess).to eq(average)
       end
     end
 
+    subject(:game_guessing) { described_class.new(0,3, number_guessing) }
     context 'when min is 0 and max is 3' do
-      xit 'returns 1' do
+      it 'returns 1' do
+        average = (game_guessing.min + game_guessing.max) / 2.to_i
+        expect(game_guessing.make_guess).to eq(average)
       end
     end
 
+    subject(:game_guessing) { described_class.new(3,3, number_guessing) }
     context 'when min and max both equal 3' do
-      xit 'returns 3' do
+      it 'returns 3' do
+        average = (game_guessing.min + game_guessing.max) / 2.to_i
+        expect(game_guessing.make_guess).to eq(average)
       end
     end
   end
@@ -160,6 +176,8 @@ describe FindNumber do
     context 'when guess and random_number are equal' do
       # Create another subject and random_number double with meaningful names.
       # The subject will need to specify the number value of @guess.
+      let(:random_number) { double('random_number', value: 3) }
+      subject(:correct_guess_game) { described_class.new(0,9, random_number, 3) }
 
       # Allow the double to receive 'value' and return the same number as @guess.
 
@@ -167,7 +185,8 @@ describe FindNumber do
       # the random_number double's value above. Remember that this test will not
       # be able to pass yet because you haven't written the method!
 
-      xit 'is game over' do
+      it 'is game over' do
+        expect(correct_guess_game.game_over?).to eq(true)
       end
     end
 
@@ -178,7 +197,10 @@ describe FindNumber do
     # NOT equal the random_number double's value above.
 
     context 'when guess and random_number are not equal' do
-      xit 'is not game over' do
+      let(:random_number) { double('random_number', value: 3) }
+      subject(:correct_guess_game) { described_class.new(0,9, random_number, 4) }
+      it 'is not game over' do
+        expect(correct_guess_game.game_over?).to eq(false)
       end
     end
   end
