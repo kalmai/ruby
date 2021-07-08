@@ -3,6 +3,7 @@
 require_relative '../lib/15a_binary_game'
 require_relative '../lib/15b_binary_search'
 require_relative '../lib/15c_random_number'
+require 'pry'
 
 # The file order to complete this lesson:
 
@@ -96,8 +97,7 @@ describe BinaryGame do
     # Looping Script Method -> Test the behavior of the method (for example, it
     # stops when certain conditions are met).
 
-    # Note: #player_input will stop looping when the valid_input is between?(min, max)
-
+    # Note: #player_input will stop looping when the valid_input is between?(min, max) 
     subject(:game_input) { described_class.new(1, 10) }
 
     context 'when user number is between arguments' do
@@ -130,17 +130,43 @@ describe BinaryGame do
 
     context 'when user inputs an incorrect value once, then a valid input' do
       before do
+        allow(game_input).to receive(:gets)
+          .exactly(2)
+          .times
+          .and_return('', '3')
       end
 
-      xit 'completes loop and displays error message once' do
+      it 'completes loop and displays error message once' do
+        min = game_input.instance_variable_get(:@minimum)
+        max = game_input.instance_variable_get(:@maximum)
+        error_message = "Input error! Please enter a number between #{min} or #{max}."
+        expect(game_input).to receive(:puts).with(error_message)
+        game_input.player_input(min, max)
       end
+
     end
 
     context 'when user inputs two incorrect values, then a valid input' do
       before do
+        allow(game_input).to receive(:gets)
+          .exactly(3)
+          .times
+          .and_return('', 'H', '3')
       end
 
-      xit 'completes loop and displays error message twice' do
+      it 'completes loop and displays error message twice' do
+        min = game_input.instance_variable_get(:@minimum)
+        max = game_input.instance_variable_get(:@maximum)
+        error_message = "Input error! Please enter a number between #{min} or #{max}."
+        expect(game_input).to receive(:puts).with(error_message).exactly(2).times
+        game_input.player_input(min, max)
+      end
+
+      it 'pro testing' do 
+        min = game_input.instance_variable_get(:@minimum)
+        max = game_input.instance_variable_get(:@maximum)
+        error_message = "Input error! Please enter a number between #{min} or #{max}.\nInput error! Please enter a number between 1 or 10.\n"
+        expect{ game_input.player_input(1, 10) }.to output(error_message).to_stdout
       end
     end
   end
