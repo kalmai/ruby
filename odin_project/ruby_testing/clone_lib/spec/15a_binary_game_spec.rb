@@ -286,7 +286,11 @@ describe BinaryGame do
 
     # Write a test for the following context.
     context 'when game minimum and maximum is 100 and 600' do
-      xit 'returns 9' do
+      subject(:game_600) { described_class.new(100, 600) }
+
+      it 'returns 9' do
+        max = game_600.maximum_guesses
+        expect(max).to eq(9)
       end
     end
   end
