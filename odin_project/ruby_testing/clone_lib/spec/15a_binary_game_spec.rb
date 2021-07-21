@@ -176,18 +176,27 @@ describe BinaryGame do
   # Create a new instance of BinaryGame and write a test for the following two
   # context blocks.
   describe '#verify_input' do
+    subject(:verification) { described_class.new(1, 10) }
     # Located inside #play_game (Looping Script Method)
     # Query Method -> Test the return value
 
     # Note: #verify_input will only return a number if it is between?(min, max)
 
     context 'when given a valid input as argument' do
-      xit 'returns valid input' do
+      it 'returns valid input' do
+        min = verification.instance_variable_get(:@minimum)
+        max = verification.instance_variable_get(:@maximum)
+        result = verification.verify_input(min, max, 3)
+        expect(result).to eq(3)
       end
     end
 
     context 'when given invalid input as argument' do
-      xit 'returns nil' do
+      it 'returns nil' do
+        min = verification.instance_variable_get(:@minimum)
+        max = verification.instance_variable_get(:@maximum)
+        result = verification.verify_input(min, max, 11)
+        expect(result).to eq(nil)
       end
     end
   end
@@ -277,7 +286,11 @@ describe BinaryGame do
 
     # Write a test for the following context.
     context 'when game minimum and maximum is 100 and 600' do
-      xit 'returns 9' do
+      subject(:game_600) { described_class.new(100, 600) }
+
+      it 'returns 9' do
+        max = game_600.maximum_guesses
+        expect(max).to eq(9)
       end
     end
   end
