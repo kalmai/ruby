@@ -335,7 +335,13 @@ describe BinaryGame do
 
     # Write a test for the following context.
     context 'when game_over? is false five times' do
-      xit 'calls display_turn_order five times' do
+      before do 
+        allow(search_display).to receive(:game_over?).and_return(false, false, false, false, false, true)
+      end
+
+      it 'calls display_turn_order five times' do
+        expect(game_display).to receive(:display_turn_order).with(search_display).exactly(5).times
+        game_display.display_binary_search(search_display)
       end
     end
   end
@@ -348,13 +354,17 @@ describe BinaryGame do
     # #display_turn_order will loop until binary_search.game_over?
 
     # Create a new subject and an instance_double for BinarySearch.
+    subject(:game) { described_class.new(1, 10) }
+    let(:guess_manage) { instance_double(BinarySearch) }
 
     before do
       # You'll need to create a few method stubs.
+      allow(guess_manage).to receive(:display_turn_order)
     end
 
     # Command Method -> Test the change in the observable state
-    xit 'increases guess_count by one' do
+    it 'increases guess_count by one' do
+      expect(game_display).to receive(:display_turn_order).with(guess_manage).instance_variable_get(:@guess_count).to eq(1)
     end
 
     # Method with Outgoing Command -> Test that a message is sent
