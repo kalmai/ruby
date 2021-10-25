@@ -46,7 +46,7 @@ def tree_nav(horizontal_amount, vertical_amount, file)
       temp_position = position > forest.length ? position % forest.length : position
       value_at_position = forest[temp_position]
 
-      binding.pry if position == 0 
+      #binding.pry if position == 0 
       tree_count += 1 if value_at_position.eql?('#')
       position += horizontal_amount
       down_count = 1 if vertical_amount > 1
