@@ -2,8 +2,9 @@ require 'pry'
 
 def position_finder(file)
   f = File.new(file, 'r')
-  vertical = 0 
+  aim = 0 
   horizontal = 0
+  vertial = 0
 
   f.each_line do |line|
     line_arr = line.strip.split(' ')
@@ -12,15 +13,14 @@ def position_finder(file)
 
     case direction
     when 'down'
-      vertical += moves
+      aim += moves
     when 'up'
-      vertical -= moves
-    when 'forward'
-      horizontal += moves
+      aim -= moves
+    when 'forward' then horizontal += moves; vertial += (aim * moves)
     end
   end
 
-  vertical * horizontal
+  vertial * horizontal
 end
 
 puts position_finder('input.txt')
