@@ -1,12 +1,53 @@
+require 'pry'
+
 def solution(file)
   total_score = 0
   data = File.read(file).split("\n")
+  strat = {
+    'x' => Choice.new('lose', 0),
+    'y' => Choice.new('draw', 3),
+    'z' => Choice.new('win', 6)
+  }
+  opponent_choice = {
+    'a' => 'rock',
+    'b' => 'paper',
+    'c' => 'scissors'
+  }
 
   data.each do |s|
     opponent, me = s.downcase.split(' ')
-    total_score += points(opponent, me)
+    total_score += choice(strat[me], opponent_choice[opponent]) + strat[me].value
   end
   total_score
+end
+
+def choice(strat, opponent_choice)
+  values = {
+    'rock' => 1,
+    'paper' => 2,
+    'scissors' => 3
+  }
+  return values[opponent_choice] if strat.strategy == 'draw'
+
+  strat.strategy == 'win' ? values[winning_value(opponent_choice)] : values[losing_value(opponent_choice)]
+end
+
+def winning_value(opponent_choice)
+  case opponent_choice
+  when 'rock' then 'paper'
+  when 'paper' then 'scissors'
+  else
+    'rock'
+  end
+end
+
+def losing_value(opponent_choice)
+  case opponent_choice
+  when 'rock' then 'scissors'
+  when 'paper' then 'rock'
+  else
+    'paper'
+  end
 end
 
 def points(player1, player2)
@@ -33,7 +74,7 @@ def choice_struct(player)
   end
 end
 
-Choice = Struct.new(:choice, :value)
+Choice = Struct.new(:strategy, :value)
 
 # puts solution('sample.txt')
 puts solution('input.txt')
