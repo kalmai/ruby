@@ -1,15 +1,20 @@
+require 'pry'
+
 def solution(filename)
   priority = (('a'..'z').to_a << ('A'..'Z').to_a).flatten.unshift('@@@')
   duplicates = []
   data = File.read(filename).split("\n")
+  group = []
   data.each do |contents|
-    small_compartment = contents[0...(contents.length / 2)].split('')
-    large_compartment = contents[(contents.length / 2)..].split('')
-    small_compartment.each do |item|
-      if large_compartment.include?(item)
-        duplicates.push(item)
-        break
+    group << contents.split('') if group.size < 3
+    if group.size == 3
+      group.first.each do |char|
+        if group[1].include?(char) && group.last.include?(char)
+          duplicates.push(char)
+          break
+        end
       end
+      group = []
     end
   end
   total = 0
