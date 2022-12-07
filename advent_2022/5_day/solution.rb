@@ -16,14 +16,14 @@ def solution(filename = 'input.txt')
   end
 
   moves = moves.split("\n").map do |str|
-    move = str.split(' ').select { |s| s.to_i > 0 }.map(&:to_i)
+    move = str.split(' ').select { |s| s.to_i.positive? }.map(&:to_i)
     Move.new(*move)
   end
 
   moves.each do |m|
     start_stack = stacks[m.start_pos]
     moving_boxes = start_stack.slice!((start_stack.length - m.boxes)..)
-    moving_boxes.reverse.each { |b| stacks[m.end_pos].push(b) }
+    moving_boxes.each { |b| stacks[m.end_pos].push(b) }
   end
   stacks.values.map(&:last).join
 end
